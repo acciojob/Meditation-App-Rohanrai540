@@ -1,42 +1,61 @@
 //your JS code here. If required.
-const audio = document.getElementById("audio");
-const video = document.getElementById("video");
 const playBtn = document.querySelector(".play");
+const audio = document.querySelector("audio");
+const video = document.querySelector("video");
 const timeDisplay = document.querySelector(".time-display");
-const timeButtons = document.querySelectorAll("#time-select button");
+const timeButtons = document.querySelectorAll(".time-select button");
 const soundButtons = document.querySelectorAll(".sound-picker button");
 
 let duration = 600;
-let playing = false;
+let remaining = duration;
+let isPlaying = false;
+let timer = null;
 
-function updateTime(time) {
-    const mins = Math.floor(time / 60);
-    const secs = time % 60;
+// Initial time
+timeDisplay.textContent = "10:0";
+
+function updateTime() {
+    const mins = Math.floor(remaining / 60);
+    const secs = remaining % 60;
     timeDisplay.textContent = `${mins}:${secs}`;
 }
 
-updateTime(duration);
-
 // Play / Pause
 playBtn.addEventListener("click", () => {
-    if (!playing) {
+    if (!isPlaying) {
+        isPlaying = true;
         audio.play();
         video.play();
         playBtn.textContent = "❚❚";
+
+        timer = setInterval(() => {
+            remaining--;
+            updateTime();
+
+            if (remaining <= 0) {
+                clearInterval(timer);
+                isPlaying = false;
+                audio.pause();
+                video.pause();
+                playBtn.textContent = "▶";
+            }
+        }, 1000);
+
     } else {
+        isPlaying = false;
         audio.pause();
         video.pause();
         playBtn.textContent = "▶";
+        clearInterval(timer);
     }
-    playing = !playing;
 });
 
-// Time selection
+// Time buttons
 timeButtons.forEach(btn => {
     btn.addEventListener("click", () => {
         duration = Number(btn.dataset.time);
-        audio.currentTime = 0;
-        updateTime(duration);
+        remaining = duration;
+        updateTime();
     });
 });
 
@@ -47,23 +66,10 @@ soundButtons.forEach(btn => {
         video.src = btn.dataset.video;
         audio.pause();
         video.pause();
-        audio.currentTime = 0;
+        isPlaying = false;
+        clearInterval(timer);
         playBtn.textContent = "▶";
-        playing = false;
     });
 });
 
-// Countdown
-audio.ontimeupdate = () => {
-    const remaining = Math.floor(duration - audio.currentTime);
-    updateTime(remaining);
-
-    if (audio.currentTime >= duration) {
-        audio.pause();
-        video.pause();
-        audio.currentTime = 0;
-        playBtn.textContent = "▶";
-        playing = false;
-    }
-};
 
