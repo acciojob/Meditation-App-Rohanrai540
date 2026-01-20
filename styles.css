@@ -1,1 +1,94 @@
 /*  your css code here. If applicable */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+#app {
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Video */
+.vid-container video {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Time buttons */
+#time-select {
+    position: absolute;
+    left: 40px;
+    top: 30%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#time-select button {
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* Player */
+.player-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+}
+
+.circle circle {
+    fill: none;
+    stroke: white;
+    stroke-width: 8;
+}
+
+.play {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: none;
+    border: none;
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+.time-display {
+    margin-top: 15px;
+    font-size: 32px;
+}
+
+/* Sound Picker */
+.sound-picker {
+    position: absolute;
+    right: 40px;
+    top: 35%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sound-picker button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
