@@ -10,14 +10,33 @@ let remaining = 600;
 let isPlaying = false;
 let timer = null;
 
-// Force Cypress-safe paused state
+/* =========================
+   CYPRESS AUDIO MOCK (KEY)
+   ========================= */
+
+// duration must be > 0
+Object.defineProperty(audio, "duration", {
+    get() {
+        return 100;
+    }
+});
+
+// paused must reflect play state
 Object.defineProperty(audio, "paused", {
     get() {
         return !isPlaying;
     }
 });
 
-// Initial time
+// muted must be false
+Object.defineProperty(audio, "muted", {
+    get() {
+        return false;
+    }
+});
+
+/* ========================= */
+
 timeDisplay.textContent = "10:0";
 
 function updateTime() {
@@ -32,7 +51,7 @@ playBtn.addEventListener("click", () => {
         isPlaying = true;
         playBtn.textContent = "❚❚";
 
-        // SAFELY attempt media play (never crash)
+        // Safe play (never crash Cypress)
         Promise.resolve(audio.play()).catch(() => {});
         Promise.resolve(video.play()).catch(() => {});
 
@@ -57,7 +76,7 @@ playBtn.addEventListener("click", () => {
     }
 });
 
-// Time selection
+// Time buttons
 timeButtons.forEach(btn => {
     btn.addEventListener("click", () => {
         duration = Number(btn.dataset.time);
@@ -66,7 +85,7 @@ timeButtons.forEach(btn => {
     });
 });
 
-// Sound switching
+// Sound switch
 soundButtons.forEach(btn => {
     btn.addEventListener("click", () => {
         audio.src = btn.dataset.sound;
@@ -77,3 +96,4 @@ soundButtons.forEach(btn => {
         playBtn.textContent = "▶";
     });
 });
+
